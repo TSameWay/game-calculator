@@ -1,0 +1,259 @@
+#:import MainMenuScreen screens.main_menu.MainMenuScreen
+#:import CharacterSelectScreen screens.character_select.CharacterSelectScreen
+#:import CalculatorScreen screens.calculator_screen.CalculatorScreen
+#:import ResultScreen screens.result_screen.ResultScreen
+#:import SavedListScreen screens.saved_list.SavedListScreen
+#:import ResourceTrackerScreen screens.resource_tracker.ResourceTrackerScreen
+#:import CharacterCompareScreen screens.character_compare.CharacterCompareScreen
+#:import PlanManagerScreen screens.plan_manager.PlanManagerScreen
+
+ScreenManager:
+    MainMenuScreen:
+    CharacterSelectScreen:
+    CalculatorScreen:
+    ResultScreen:
+    SavedListScreen:
+    ResourceTrackerScreen:
+    CharacterCompareScreen:
+    PlanManagerScreen:
+
+<MainMenuScreen>:
+    name: 'main'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+        Label:
+            text: 'Главное меню'
+            font_size: dp(24)
+        Button:
+            text: 'Рассчитать'
+            on_release: app.root.current = 'select'
+        Button:
+            text: 'Мои персонажи'
+            on_release: app.root.current = 'saved'
+        Button:
+            text: 'Трекер ресурсов'
+            on_release: app.root.current = 'resources'
+        Button:
+            text: 'Сравнение персонажей'
+            on_release: app.root.current = 'compare'
+        Button:
+            text: 'Мои планы'
+            on_release: app.root.current = 'plans'
+        Button:
+            text: 'Выход'
+            on_release: app.stop()
+
+<CharacterSelectScreen>:
+    name: 'select'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Выбор персонажа'
+            size_hint_y: 0.1
+            font_size: dp(20)
+        ScrollView:
+            BoxLayout:
+                id: character_layout
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(5)
+        Button:
+            text: 'Назад'
+            size_hint_y: 0.1
+            on_release: app.root.current = 'main'
+
+<CalculatorScreen>:
+    name: 'calculator'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(10)
+        Label:
+            id: character_name
+            text: 'Calculating for:'
+            size_hint_y: 0.05
+            font_size: dp(18)
+        BoxLayout:
+            id: calculator_container
+            orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(10)
+            Button:
+                text: 'Рассчитать итог'
+                on_release: root.calculate_total()
+            Button:
+                text: 'Назад'
+                on_release: app.root.current = 'select'
+
+<ResultScreen>:
+    name: 'result'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        Label:
+            text: 'Результаты расчета'
+            size_hint_y: 0.1
+            font_size: dp(20)
+        Label:
+            id: result_label
+            text: 'Результат:'
+            font_size: dp(16)
+        ScrollView:
+            Label:
+                id: resources_label
+                text: 'Ресурсы будут здесь'
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+                font_size: dp(14)
+        BoxLayout:
+            size_hint_y: 0.2
+            spacing: dp(10)
+            Button:
+                text: 'Сохранить'
+                on_release: app.save_result()
+            Button:
+                text: 'В главное меню'
+                on_release: app.root.current = 'main'
+            Button:
+                text: 'Назад'
+                on_release: app.root.current = 'calculator'
+
+<SavedListScreen>:
+    name: 'saved'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        Label:
+            text: 'Мои персонажи'
+            size_hint_y: 0.1
+            font_size: dp(20)
+        ScrollView:
+            BoxLayout:
+                id: saved_layout
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(5)
+        Button:
+            text: 'Назад'
+            size_hint_y: 0.1
+            on_release: app.root.current = 'main'
+
+<ResourceTrackerScreen>:
+    name: 'resources'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(10)
+        Label:
+            text: 'Мои ресурсы'
+            font_size: dp(24)
+            size_hint_y: None
+            height: dp(40)
+        ScrollView:
+            BoxLayout:
+                id: resources_container
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(5)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+            Button:
+                text: 'Обновить все'
+                on_release: root.update_all_resources()
+            Button:
+                text: 'Назад'
+                on_release: app.root.current = 'main'
+
+<CharacterCompareScreen>:
+    name: 'compare'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(10)
+        Label:
+            text: 'Сравнение сохраненных персонажей'
+            font_size: dp(24)
+            size_hint_y: None
+            height: dp(40)
+            text_size: self.width, None
+            halign: 'center'
+        Label:
+            text: 'Выберите двух сохраненных персонажей для сравнения затрат ресурсов'
+            font_size: dp(14)
+            size_hint_y: None
+            height: dp(60)
+            text_size: self.width, None
+            halign: 'center'
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+            Button:
+                id: select_char1_btn
+                text: 'Выбрать 1-го персонажа'
+                on_release: root.show_character_selection(1)
+            Button:
+                id: select_char2_btn
+                text: 'Выбрать 2-го персонажа'
+                on_release: root.show_character_selection(2)
+        ScrollView:
+            BoxLayout:
+                id: comparison_container
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(5)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+            Button:
+                text: 'Сравнить'
+                on_release: root.compare_characters()
+            Button:
+                text: 'Назад'
+                on_release: app.root.current = 'main'
+
+<PlanManagerScreen>:
+    name: 'plans'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(10)
+        Label:
+            text: 'Мои планы прокачки'
+            font_size: dp(24)
+            size_hint_y: None
+            height: dp(40)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+            Button:
+                text: 'Создать новый план'
+                on_release: root.show_plan_creation()
+            Button:
+                text: 'Обновить'
+                on_release: root.load_plans()
+        ScrollView:
+            BoxLayout:
+                id: plans_container
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(10)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            Button:
+                text: 'Назад'
+                on_release: app.root.current = 'main'
